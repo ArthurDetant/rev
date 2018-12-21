@@ -1,0 +1,3 @@
+/etudiants/adetant/Bureau/RO/ROO/build/CMakeFiles/edit_cache.dir
+/etudiants/adetant/Bureau/RO/ROO/build/CMakeFiles/rebuild_cache.dir
+/etudiants/adetant/Bureau/RO/ROO/build/CMakeFiles/main.out.dir

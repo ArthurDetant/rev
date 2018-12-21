@@ -1,0 +1,149 @@
+﻿POOA - TP réflexivité
+
+Detant Arthur
+
+
+Classe Object
+
+Question 1 : À quoi sert la méthode toString() de la classe Object ?
+
+La méthode toString() retourne une représentation sous forme de string de l’objet.
+
+Question 2 : Que vous apprend-elle sur le contenu du vecteur ? Codez !
+En mettant cette ligne dans le main :
+System.out.println(v.toString());
+J’obtiens ceci : « [tpreflect.paquetcadeau.hidden.Type1@14ae5a5, tpreflect.paquetcadeau.hidden.Type2@7f31245a, Muahahahahahahaaaa!!!, interface tpreflect.paquetcadeau.hidden.Type4] ».
+Je remarque qu’il y a aussi des fichiers avec le nom « type » et un numéro derrière.
+
+Question 3 : Y a-t-il des éléments particuliers ?
+
+Il y a donc des fichiers type et un fichier qui est une interface.
+
+
+Classe Class et package java.lang.reflect
+
+Question 4 : Mais alors, les classes sont-elles des objets ?
+(Indice : terminologie. Ne pas confondre la notion de classe et sa représentation interne dans la machine virtuelle)
+
+Un objet est l’instance d’une classe.
+
+
+Question 5 : À quoi peut-on accéder ?
+
+La classe Class est définie dans le package java.lang.
+
+La classe Class permet :
+de décrire une classe ou une interface par introspection : obtenir son nom, sa classe mère, la liste de ses méthodes, de ses variables de classe, de ses constructeurs et variables d'instances, etc ... 
+d'agir sur une classe en envoyant des messages à un objet Class comme à tout autre objet. Par exemple, créer dynamiquement à partir d'un objet Class une nouvelle instance de la classe représentée 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Question 6 : Quels sont les méthodes, constructeurs, attributs des éléments contenus dans le vecteur ? (Codez !)
+A titre d’exemple, choisissez un des éléments du vecteur. Découvrez dynamiquement sa liste de méthodes, et appelez une de ces méthodes. Rappel :
+lorsque vous codez, vous ne connaissez pas à l’avance le nom de la méthode à
+invoquer !
+Class cV = o.getClass();
+  Method ms[] = cV.getMethods();
+ if(ms.length!=0){
+   for (int j = 0; j< ms.length; j++) {
+     System.out.println(ms[j]);
+ }
+ } else {
+   System.out.println("pas de methode");
+ }
+ Field f[] = cV.getFields();
+ if(f.length!=0){
+   for (int j = 0; j< f.length; j++) {
+     System.out.println(f[j]);
+   }
+ } else {
+   System.out.println("pas de Field");
+ }
+Constructor c[] = cV.getConstructors();
+ if(c.length!=0){
+   for (int j = 0; j< c.length; j++) {
+     System.out.println(c[j]);
+   }
+ } else {
+   System.out.println("pas de Constructeur");
+ }
+Field df[] = cV.getDeclaredFields();
+ if(df.length!=0){
+   for (int j = 0; j< df.length; j++) {
+     System.out.println(df[j]);
+   }
+ } else {
+   System.out.println("pas de DeclaredField");
+ }
+
+
+La methode getFields() ne renvoie que les champs publics locaux et hérités.
+La methode getDeclaredFields() renvoie tous les attributs locaux uniquement.
+
+Question 7 : Que pouvez-vous dire au sujet de l’encapsulation ?
+(Pensez aux mots-clés private, public) Y a-t-il des incidences du point de vue sécurité ? Discutez !
+
+Le principe d'encapsulation dit qu'un objet ne doit pas exposer sa représentation interne au monde extérieur. Les données stockées par l'objet doivent être cachées de l'utilisateur de l'objet, et toute interaction avec l'objet doit se faire via des méthodes. Elle se pratique en mettant devant l’objet public, private ou protected.
+
+
+
+
+
+
+Question 8 : D’après vous, à quoi ces méthodes peuvent servir dans la vraie vie, pourquoi existent-elles ?
+
+
+
+Utilité :
+- Analyse des classes, découverte d’attributs, de méthodes
+- Chargement dynamique de classes, création d’instances
+- Inspecter des objets dynamiquement
+- Manipuler des tableaux génériques, créer des méthodes génériques
+- Débogage, profiling, complétion automatique
+
+
+
+
+Question 9 : Pourquoi la classe Class est-elle final ?
+
+
+La classe Class est déclarée comme final pour qu’elle ne soit pas modifiée, c’est une question de sécurité.
+ 
+
+Réflexivité
+
+Question 10 : Modifiez un attribut public quelconque d’un des éléments contenus dans le vecteur.
+Class c = o.getClass();
+Field fs[] = c.getFields();
+o.fs[0]=valeur
+
+Question 11 : Que fait cette méthode ?
+
+setAccessible() supprime les contrôles d’accès aux champs, méthodes et constructeurs.
+
+Question 12 : Utilisez-la en reprenant vos conclusions aux questions 6, 7 et 10.
+
+Class c = o.getClass();
+Field fs[] = c.getFields();
+Field field1 = c.getDeclaredField("fs[0]");
+field1.setAccessible(true);
+System.out.println(field1.get(o));
+
+Conclusion
+Question 13 : Faites quelques recherches et implémentez un « Security Manager » basique qui empêche ces modifications.
+@Override
+public void checkPackageAccess(String pkg){
+if(pkg.equals("java.lang.reflect")){
+throw new SecurityException("Reflection is not allowed!");
+}
